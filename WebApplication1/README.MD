@@ -4,6 +4,8 @@
 
 추가 기록 : https://lunar-halo.tistory.com/57
 
+자료 : https://drive.google.com/file/d/1hoSYXB7F9zaPKyeP9_BQ322W8pz3W3hY/view?usp=sharing
+
 > **ASP.NET Core 10.0 기반의 도서 관리 백엔드 시스템**
 > 로컬 환경부터 Docker 컨테이너라이징, 외부 기기(Mobile) 연동까지 고려한 풀스택 인프라 구축 프로젝트
 > (윈도우 기반 -> "맥" 환경 설정, kestrel 바인딩 주소 -> "Docker" 설정 등 차이가 있습니다)
