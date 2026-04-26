@@ -1,45 +1,26 @@
-
+// 웹 애플리케이션을 만들기 위한 '빌더(Builder)' 객체를 생성.
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. 기존 AddOpenApi 대신(또는 함께) Swagger 서비스 추가
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); // 이 줄이 Swagger를 만듭니다!
+builder.Services.AddControllers();          // 각 기능을 바구니에 담아보자 1) 컨트롤러 기능을 쓸 거야!
+builder.Services.AddEndpointsApiExplorer(); // 2) API가 어디 있는지 찾아주는 기능을 넣을게!
+builder.Services.AddSwaggerGen();           // 3) Swagger(문서화 도구)를 생성하는 기능을 추가해줘!
 
-var app = builder.Build();
+var app = builder.Build(); // 4) 조립 = 지금까지 바구니에 담은 설정과 서비스들을 가지고 실제 실행 가능한 '앱(App)' 객체를 만들자. (설계도, 부품 완 -> 자동차 조립 완)
 
-// if (app.Environment.IsDevelopment())
-// {
-// 2. Swagger UI 활성화
-app.UseSwagger();
-app.UseSwaggerUI(); // 이게 있어야 브라우저에서 화면이 나옵니다!
-
-app.MapOpenApi(); // 이건 기본 OpenAPI 데이터용
-// }
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
+if(app.Environment.IsDevelopment()) // 미들웨어 - 규칙 설정 : 지금 개발 중이면?
 {
-"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-var forecast = Enumerable.Range(1, 5).Select(index =>
-new WeatherForecast
-(
-DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-Random.Shared.Next(-20, 55),
-summaries[Random.Shared.Next(summaries.Length)]
-))
-.ToArray();
-return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    app.UseSwagger();   // Swagger 데이터를 만들고
+    app.UseSwaggerUI(); // 웹 화면으로 예쁘게 보여줘!
 }
+
+app.UseHttpsRedirection();  // http로 들어오면 안전한 https로 자동으로 바꿔줘.
+app.UseAuthorization();    // 권한이 있는 사용자인지 체크해.
+
+app.MapControllers(); // 컨트롤러에 적힌 주소들(Route)을 연결해줘.
+
+app.MapGet("/hello", () => "hello from Windows ASP.NET core Web API"); 
+// 누군가 주소창에 "/hello"라고 치면 이 문장을 보여줘!
+
+app.Run(); // 서버를 켜고 손님(요청)을 기다리기 시작해.
+
+// https://localhost:5001/hello 접속 시, hello from Windows ASP.NET core Web API 를 볼 수 있음
